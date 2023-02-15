@@ -101,6 +101,8 @@ L['Open Calendar'] = "Открыть календарь";
 L['Open Clock'] = "Открыть часы";
 L['Hide Event Text'] = "Скрыть текст событий";
 
+L['Vault'] = true;
+
 L['Travel'] = "Перемещение";
 L['Port Options'] = "Назначение телепорта";
 L['Ready'] = "Готово";

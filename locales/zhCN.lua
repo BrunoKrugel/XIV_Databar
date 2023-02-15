@@ -101,6 +101,8 @@ L['Open Calendar'] = "打开日历";
 L['Open Clock'] = "打开时钟";
 L['Hide Event Text'] = "隐藏事件文字";
 
+L['Vault'] = true;
+
 L['Travel'] = "传送";
 L['Port Options'] = "传送选项";
 L['Ready'] = "就绪";

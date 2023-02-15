@@ -101,6 +101,8 @@ L['Open Calendar'] = "Abrir Calendário";
 L['Open Clock'] = "Abrir Relógio";
 L['Hide Event Text'] = "Esconder Texto do Evento";
 
+L['Vault'] = true;
+
 L['Travel'] = "Viagem";
 L['Port Options'] = "Opções de Teleporte";
 L['Ready'] = "Pronto";

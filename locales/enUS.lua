@@ -103,6 +103,8 @@ L['Open Calendar'] = true;
 L['Open Clock'] = true;
 L['Hide Event Text'] = true;
 
+L['Vault'] = true;
+
 L['Travel'] = true;
 L['Port Options'] = true;
 L['Ready'] = true;
