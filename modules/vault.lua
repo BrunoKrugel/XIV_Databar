@@ -67,10 +67,9 @@ function VaultModule:Refresh()
   self.vaultTextFrame:SetSize(self.vaultText:GetStringWidth(), self.vaultText:GetStringHeight())
   self.vaultTextFrame:SetPoint('CENTER')
 
-  self.clockText:SetPoint('CENTER')  
+  self.clockText:SetPoint('CENTER')
   self.clockText:SetText("GREAT VAULT")
   self.clockText:SetFont(xb:GetFont(db.text.smallFontSize))
-
 end
 
 function VaultModule:GetDefaultOptions()
@@ -80,13 +79,13 @@ function VaultModule:GetDefaultOptions()
 end
 
 function VaultModule:SetVaultColor()
-    local db = xb.db.profile
-    if self.vaultTextFrame:IsMouseOver() then
-      self.vaultText:SetTextColor(unpack(xb:HoverColors()))
-    else
-      self.vaultText:SetTextColor(xb:GetColor('normal'))
-    end
+  local db = xb.db.profile
+  if self.vaultTextFrame:IsMouseOver() then
+    self.vaultText:SetTextColor(unpack(xb:HoverColors()))
+  else
+    self.vaultText:SetTextColor(xb:GetColor('normal'))
   end
+end
 
 function VaultModule:GetConfig()
   return {
