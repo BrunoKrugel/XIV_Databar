@@ -52,9 +52,6 @@ function VaultModule:CreateFrames()
   self.vaultText:SetPoint('CENTER')
   self.vaultText:SetText("GREAT VAULT")
   self.vaultText:SetFont(xb:GetFont(db.text.smallFontSize))  
-
-
-
 end
 
 function VaultModule:RegisterFrameEvents()
@@ -96,6 +93,12 @@ function VaultModule:SetVaultColor()
   else
     self.vaultText:SetTextColor(xb:GetColor('normal'))
   end
+end
+
+function VaultModule:GetDefaultOptions()
+  return 'vault', {
+    enabled = true
+  }
 end
 
 function VaultModule:GetConfig()
