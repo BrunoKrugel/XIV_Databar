@@ -26,39 +26,15 @@ function VaultModule:OnEnable()
 end
 
 function VaultModule:CreateFrames()
-  self.vaultTextFrame = self.vaultTextFrame or CreateFrame("BUTTON", nil, vaultFrame)
-  self.vaultText = self.vaultText or self.vaultTextFrame:CreateFontString(nil, "OVERLAY", "GameTooltipText")
-
-  local db = xb.db.profile
-	local relativeAnchorPoint = 'RIGHT'
-	local xOffset = xb.db.profile.general.moduleSpacing
-	local parentFrame = xb:GetFrame('volumeFrame')
-	if not xb.db.profile.modules.armor.enabled then
-		parentFrame=xb:GetFrame('armorFrame')
-		if not xb.db.profile.modules.microMenu.enabled then
-			parentFrame=xb:GetFrame('microMenuFrame')
-			relativeAnchorPoint = 'LEFT'
-			xOffset = 0
-		end
-	end
-
-  self:SetVaultColor()
-  self.vaultFrame:SetSize(self.vaultText:GetStringWidth(), self.vaultText:GetStringHeight())
-  self.vaultFrame:SetPoint('LEFT', parentFrame, relativeAnchorPoint, xOffset, 0)
-
-  self.vaultTextFrame:SetSize(self.vaultText:GetStringWidth(), self.vaultText:GetStringHeight())
-  self.vaultTextFrame:SetPoint('CENTER')
-
-  self.vaultText:SetPoint('CENTER')
-  self.vaultText:SetText("GREAT VAULT")
-  self.vaultText:SetFont(xb:GetFont(db.text.smallFontSize))  
+  self.vaultButton = self.vaultButton or CreateFrame("BUTTON", nil, self.vaultFrame)
+  self.vaultText = self.vaultText or self.vaultButton:CreateFontString(nil, "OVERLAY")
 end
 
 function VaultModule:RegisterFrameEvents()
-  self.vaultTextFrame:EnableMouse(true)
-  self.vaultTextFrame:RegisterForClicks('AnyUp', 'AnyDown')
+  self.vaultButton:EnableMouse(true)
+  self.vaultButton:RegisterForClicks('AnyUp', 'AnyDown')
 
-  self.vaultTextFrame:SetScript("OnMouseDown", function(self, button)
+  self.vaultButton:SetScript("OnMouseDown", function(self, button)
     if button == 'LeftButton' then
       LoadAddOn("Blizzard_WeeklyRewards");
       if WeeklyRewardsFrame:IsShown() then
@@ -78,6 +54,35 @@ function VaultModule:Refresh()
   if self.vaultFrame == nil then
     return;
   end
+
+  if not xb.db.profile.modules.vault.enabled then 
+    self:Disable(); 
+    return; 
+  end
+
+  local db = xb.db.profile
+	local relativeAnchorPoint = 'RIGHT'
+	local xOffset = xb.db.profile.general.moduleSpacing
+	local parentFrame = xb:GetFrame('volumeFrame')
+	if not xb.db.profile.modules.armor.enabled then
+		parentFrame=xb:GetFrame('armorFrame')
+		if not xb.db.profile.modules.microMenu.enabled then
+			parentFrame=xb:GetFrame('microMenuFrame')
+			relativeAnchorPoint = 'LEFT'
+			xOffset = 0
+		end
+	end
+
+  self:SetVaultColor()
+  self.vaultFrame:SetSize(self.vaultText:GetStringWidth(), self.vaultText:GetStringHeight())
+  self.vaultFrame:SetPoint('CENTER', parentFrame, relativeAnchorPoint, xOffset, 0)
+
+  self.vaultButton:SetSize(self.vaultText:GetStringWidth(), self.vaultText:GetStringHeight())
+  self.vaultButton:SetPoint('CENTER')
+
+  self.vaultText:SetPoint('CENTER')
+  self.vaultText:SetText("GREAT VAULT")
+  self.vaultText:SetFont(xb:GetFont(db.text.smallFontSize))    
 end
 
 function VaultModule:GetDefaultOptions()
@@ -88,7 +93,7 @@ end
 
 function VaultModule:SetVaultColor()
   local db = xb.db.profile
-  if self.vaultTextFrame:IsMouseOver() then
+  if self.vaultButton:IsMouseOver() then
     self.vaultText:SetTextColor(unpack(xb:HoverColors()))
   else
     self.vaultText:SetTextColor(xb:GetColor('normal'))
