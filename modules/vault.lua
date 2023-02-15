@@ -1,13 +1,13 @@
-local AddOnName, Engine = ...;
+local AddOnName, XIVBar = ...;
 local _G = _G;
-local xb = Engine[1];
-local L = Engine[2];
+local xb = XIVBar;
+local L = XIVBar.L;
 local P = {};
 
 VaultModule = xb:NewModule("VaultModule")
 
 function VaultModule:GetName()
-  return L['Vault Module'];
+  return L['Vault'];
 end
 
 function VaultModule:OnInitialize()
@@ -15,7 +15,7 @@ end
 
 function VaultModule:OnEnable()
   if self.vaultFrame == nil then
-    self.vaultFrame = CreateFrame("FRAME", nil, xb:GetFrame('bar'))
+    self.vaultFrame = CreateFrame("FRAME", "VaultModule", xb:GetFrame('bar'))
     xb:RegisterFrame('vaultFrame', self.vaultFrame)
   end
 
@@ -25,12 +25,39 @@ function VaultModule:OnEnable()
   self:Refresh()
 end
 
-function vaultFrame:CreateFrames()
+function VaultModule:CreateFrames()
   self.vaultTextFrame = self.vaultTextFrame or CreateFrame("BUTTON", nil, vaultFrame)
   self.vaultText = self.vaultText or self.vaultTextFrame:CreateFontString(nil, "OVERLAY", "GameTooltipText")
+
+  local db = xb.db.profile
+	local relativeAnchorPoint = 'RIGHT'
+	local xOffset = xb.db.profile.general.moduleSpacing
+	local parentFrame = xb:GetFrame('volumeFrame')
+	if not xb.db.profile.modules.armor.enabled then
+		parentFrame=xb:GetFrame('armorFrame')
+		if not xb.db.profile.modules.microMenu.enabled then
+			parentFrame=xb:GetFrame('microMenuFrame')
+			relativeAnchorPoint = 'LEFT'
+			xOffset = 0
+		end
+	end
+
+  self:SetVaultColor()
+  self.vaultFrame:SetSize(self.vaultText:GetStringWidth(), self.vaultText:GetStringHeight())
+  self.vaultFrame:SetPoint('LEFT', parentFrame, relativeAnchorPoint, xOffset, 0)
+
+  self.vaultTextFrame:SetSize(self.vaultText:GetStringWidth(), self.vaultText:GetStringHeight())
+  self.vaultTextFrame:SetPoint('CENTER')
+
+  self.vaultText:SetPoint('CENTER')
+  self.vaultText:SetText("GREAT VAULT")
+  self.vaultText:SetFont(xb:GetFont(db.text.smallFontSize))  
+
+
+
 end
 
-function vaultFrame:RegisterFrameEvents()
+function VaultModule:RegisterFrameEvents()
   self.vaultTextFrame:EnableMouse(true)
   self.vaultTextFrame:RegisterForClicks('AnyUp', 'AnyDown')
 
@@ -54,22 +81,6 @@ function VaultModule:Refresh()
   if self.vaultFrame == nil then
     return;
   end
-
-  if InCombatLockdown() then
-    self:SetVaultColor()
-    return
-  end
-
-  self:SetVaultColor()
-  self.vaultFrame:SetSize(self.vaultText:GetStringWidth(), self.vaultText:GetStringHeight())
-  self.vaultFrame:SetPoint("CENTER", xb, "BOTTOM", -82, 10)
-
-  self.vaultTextFrame:SetSize(self.vaultText:GetStringWidth(), self.vaultText:GetStringHeight())
-  self.vaultTextFrame:SetPoint('CENTER')
-
-  self.clockText:SetPoint('CENTER')
-  self.clockText:SetText("GREAT VAULT")
-  self.clockText:SetFont(xb:GetFont(db.text.smallFontSize))
 end
 
 function VaultModule:GetDefaultOptions()
@@ -96,8 +107,16 @@ function VaultModule:GetConfig()
         name = ENABLE,
         order = 0,
         type = "toggle",
-        get = function() return P.modules.vaultModule.enabled; end,
-        set = function(_, val) P.modules.vaultModule.enabled = val; end
+        get = function() return xb.db.profile.modules.vault.enabled; end,
+        set = function(_, val)
+          xb.db.profile.modules.vault.enabled = val
+          if val then
+            self:Enable()
+          else
+            self:Disable()
+          end
+        end,
+        width = "full"
       }
     }
   }
